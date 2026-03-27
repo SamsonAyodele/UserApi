@@ -6,9 +6,11 @@ using System.ComponentModel.DataAnnotations;
 using UserApi.Services;
 using UserApi.DTOs;
 using UserApi.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
