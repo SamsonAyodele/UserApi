@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UserApi.DTOs.Auth;
 using UserApi.Helpers;
 using UserApi.Services;
@@ -62,6 +63,58 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error logging in user with email: {Email}", dto.Email);
+            return BadRequest(new ApiResponse<Object>
+            {
+                Success = false,
+                Message = ex.Message,
+                Data = null
+            });
+        }
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken(TokenDto dto)
+    {
+        _logger.LogInformation("Refreshing token");
+        try
+        {
+            var refresh = await _authService.RefreshTokenAsync(dto.RefreshToken);
+            return Ok(new ApiResponse<Object>
+            {
+                Success = true,
+                Message = "Token refreshed successfully",
+                Data = refresh
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error refreshing token");
+            return BadRequest(new ApiResponse<Object>
+            {
+                Success = false,
+                Message = ex.Message,
+                Data = null
+            });
+        }
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(TokenDto dto)
+    {
+        _logger.LogInformation("Logging out user with refresh token: {RefreshToken}", dto.RefreshToken);
+        try
+        {
+            var logout = await _authService.LogoutAsync(dto.RefreshToken);
+            return Ok(new ApiResponse<Object>
+            {
+                Success = true,
+                Message = " User logged out successfully",
+                Data = null
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error logging out user with refresh token: {RefreshToken}", dto.RefreshToken);
             return BadRequest(new ApiResponse<Object>
             {
                 Success = false,
