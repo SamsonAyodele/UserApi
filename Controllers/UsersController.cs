@@ -100,6 +100,7 @@ public class UsersController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin, User")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {

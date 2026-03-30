@@ -36,7 +36,8 @@ public class AuthService
         var user = new User
         {
             Name = dto.Name,
-            Email = dto.Email
+            Email = dto.Email,
+            Role = "User"
         };
 
         user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
@@ -64,7 +65,8 @@ public class AuthService
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         var key = new SymmetricSecurityKey(
