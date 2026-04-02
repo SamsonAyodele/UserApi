@@ -6,31 +6,32 @@ using Microsoft.Extensions.Logging;
 using UserApi.Infrastructure.Data;
 using UserApi.Domain.Entities;
 using UserApi.Application.DTOs;
+using UserApi.Application.Interfaces;
+using UserApi.Infrastructure.Repositories;
 
 namespace UserApi.Application.Services;
 
 public class UserService : IUserService
 {
-    private readonly AppDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<UserService> _logger;
 
-    public UserService(AppDbContext context, ILogger<UserService> logger)
+    public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
     public async Task<List<UserResponseDto>> GetUsersAsync()
     {
         _logger.LogInformation("Retrieving all users");
-        return await _context.Users
-            .Select(u => new UserResponseDto
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Email = u.Email
-            })
-            .ToListAsync();
+        var users = await _unitOfWork.Users.GetAllAsync();
+        return users.Select(u => new UserResponseDto
+        {
+            Id = u.Id,
+            Name = u.Name,
+            Email = u.Email
+        }).ToList();
     }
 
     public async Task<UserResponseDto> CreateUserAsync(CreateUserDto dto)
@@ -42,8 +43,8 @@ public class UserService : IUserService
             Email = dto.Email
         };
 
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
+        await _unitOfWork.Users.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
 
         return new UserResponseDto
         {
@@ -56,7 +57,7 @@ public class UserService : IUserService
     public async Task<UserResponseDto?> GetUserByIdAsync(int id)
     {
         _logger.LogInformation("Retrieving user with ID: {Id}", id);
-        var user = await _context.Users.FindAsync(id);
+        var user = await _unitOfWork.Users.GetByIdAsync(id);
         if (user == null)
         {
             _logger.LogWarning("User not found with ID: {Id}", id);
@@ -73,7 +74,7 @@ public class UserService : IUserService
     public async Task<UserResponseDto?> UpdateUserAsync(int id, CreateUserDto dto)
     {
         _logger.LogInformation("Updating user with ID: {Id}", id);
-        var user = await _context.Users.FindAsync(id);
+        var user = await _unitOfWork.Users.GetByIdAsync(id);
         if (user == null)
         {
             _logger.LogWarning("User not found with ID: {Id}", id);
@@ -81,8 +82,8 @@ public class UserService : IUserService
         }
         user.Name = dto.Name;
         user.Email = dto.Email;
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync();
+        await _unitOfWork.Users.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         return new UserResponseDto
         {
             Id = user.Id,
@@ -94,14 +95,14 @@ public class UserService : IUserService
     public async Task<bool> DeleteUserAsync(int id)
     {
         _logger.LogInformation("Deleting user with ID: {Id}", id);
-        var user = await _context.Users.FindAsync(id);
+        var user = await _unitOfWork.Users.GetByIdAsync(id);
         if (user == null)
         {
             _logger.LogWarning("User not found with ID: {Id}", id);
             return false;
         }
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
+        await _unitOfWork.Users.DeleteAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         _logger.LogInformation("Deleted user with ID: {Id}", id);
         return true;
     }

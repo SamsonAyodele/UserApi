@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using UserApi.Domain.Entities;
 using UserApi.Application.Interfaces;
+using UserApi.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Register DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
