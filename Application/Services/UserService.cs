@@ -1,12 +1,13 @@
-// using System.Collections.Generic;
-// using System.Diagnostics.Eventing.Reader;
-// using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using UserApi.Data;
-using UserApi.DTOs;
-using UserApi.Models;
+using Microsoft.Extensions.Logging;
+using UserApi.Infrastructure.Data;
+using UserApi.Domain.Entities;
+using UserApi.Application.DTOs;
 
-namespace UserApi.Services;
+namespace UserApi.Application.Services;
 
 public class UserService : IUserService
 {

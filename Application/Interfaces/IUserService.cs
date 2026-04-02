@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserApi.DTOs;
+using UserApi.Application.DTOs;
 
-namespace UserApi.Services;
+namespace UserApi.Application.Services;
 
 public interface IUserService
 {

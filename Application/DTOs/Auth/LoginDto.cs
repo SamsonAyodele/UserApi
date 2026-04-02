@@ -1,4 +1,4 @@
-namespace UserApi.DTOs.Auth;
+namespace UserApi.Application.DTOs.Auth;
 
 public class LoginDto
 {

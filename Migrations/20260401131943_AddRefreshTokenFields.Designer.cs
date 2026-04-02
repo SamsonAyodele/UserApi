@@ -12,8 +12,8 @@ using UserApi.Infrastructure.Data;
 namespace UserApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260327181443_AddPaswordHash")]
-    partial class AddPaswordHash
+    [Migration("20260401131943_AddRefreshTokenFields")]
+    partial class AddRefreshTokenFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,16 @@ namespace UserApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

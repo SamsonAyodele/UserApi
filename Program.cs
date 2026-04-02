@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using UserApi.Middleware;
-using UserApi.Data;
-using UserApi.Services;
+using UserApi.Infrastructure.Data;
+using UserApi.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using UserApi.Models;
+using UserApi.Domain.Entities;
+using UserApi.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 // Register DbContext

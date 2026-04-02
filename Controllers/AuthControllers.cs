@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UserApi.DTOs.Auth;
+using UserApi.Application.DTOs.Auth;
 using UserApi.Helpers;
-using UserApi.Services;
+using UserApi.Application.Services;
+using UserApi.Application.Interfaces;
 
 namespace UserApi.Controllers;
 
@@ -11,10 +12,10 @@ namespace UserApi.Controllers;
 
 public class AuthController : ControllerBase
 {
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(AuthService authService, ILogger<AuthController> logger)
+    public AuthController(IAuthService authService, ILogger<AuthController> logger)
     {
         _authService = authService;
         _logger = logger;

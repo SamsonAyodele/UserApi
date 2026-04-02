@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using UserApi.Data;
-using UserApi.DTOs.Auth;
-using UserApi.Models;
+using UserApi.Infrastructure.Data;
+using UserApi.Application.DTOs.Auth;
+using UserApi.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UserApi.Application.Interfaces;
 
-namespace UserApi.Services;
+namespace UserApi.Application.Services;
 
-public class AuthService
+public class AuthService : IAuthService
 {
     private readonly AppDbContext _context;
     private readonly IPasswordHasher<User> _passwordHasher;

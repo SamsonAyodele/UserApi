@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UserApi.Models;
-using UserApi.Data;
+using UserApi.Infrastructure.Data;
 using System.ComponentModel.DataAnnotations;
-using UserApi.Services;
-using UserApi.DTOs;
 using UserApi.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using UserApi.Application.Services;
+using UserApi.Application.DTOs;
 
 namespace UserApi.Controllers;
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UserApi.Data;
+using UserApi.Infrastructure.Data;
 
 #nullable disable
 
@@ -44,6 +44,12 @@ namespace UserApi.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
                         .IsRequired()
