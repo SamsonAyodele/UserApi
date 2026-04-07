@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using UserApi.Helpers;
 
 namespace UserApi.Middleware;
 
@@ -23,13 +24,8 @@ public class ErrorHandlingMiddleware
     }
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var response = new
-        {
-            success = false,
-            message = "Something went wrong",
-            error = exception.Message // ⚠️ remove in production later
-        };
+        var response = new ApiResponse<object>(false, exception.Message, null);
         var json = JsonSerializer.Serialize(response);
         return context.Response.WriteAsync(json);
-    }   
+    }
 }
