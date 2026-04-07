@@ -28,22 +28,13 @@ public class AuthController : ControllerBase
         try
         {
             var register = await _authService.RegisterAsync(dto);
-            return Ok(new ApiResponse<Object>
-            {
-                Success = true,
-                Message = "User registered successfully",
-                Data = register
-            });
+            return Ok(new ApiResponse<Object>(true, "User registered successfully", register));
+          
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error registering user with email: {Email}", dto.Email);
-            return BadRequest(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = ex.Message,
-                Data = null
-            });
+            return BadRequest(new ApiResponse<Object>(false, ex.Message, null));
         }
     }
 
@@ -54,22 +45,12 @@ public class AuthController : ControllerBase
         try
         {
             var login = await _authService.LoginAsync(dto);
-            return Ok(new ApiResponse<Object>
-            {
-                Success = true,
-                Message = "login successful",
-                Data = login
-            });
+            return Ok(new ApiResponse<Object>(true, "login successful", login));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error logging in user with email: {Email}", dto.Email);
-            return BadRequest(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = ex.Message,
-                Data = null
-            });
+            return BadRequest(new ApiResponse<Object>(false, ex.Message, null));
         }
     }
 
@@ -80,22 +61,12 @@ public class AuthController : ControllerBase
         try
         {
             var refresh = await _authService.RefreshTokenAsync(dto.RefreshToken);
-            return Ok(new ApiResponse<Object>
-            {
-                Success = true,
-                Message = "Token refreshed successfully",
-                Data = refresh
-            });
+            return Ok(new ApiResponse<Object>(true, "Token refreshed successfully", refresh));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error refreshing token");
-            return BadRequest(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = ex.Message,
-                Data = null
-            });
+            return BadRequest(new ApiResponse<Object>(false, ex.Message, null));
         }
     }
 
@@ -106,22 +77,12 @@ public class AuthController : ControllerBase
         try
         {
             var logout = await _authService.LogoutAsync(dto.RefreshToken);
-            return Ok(new ApiResponse<Object>
-            {
-                Success = true,
-                Message = " User logged out successfully",
-                Data = null
-            });
+            return Ok(new ApiResponse<Object>(true, " User logged out successfully", null));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error logging out user with refresh token: {RefreshToken}", dto.RefreshToken);
-            return BadRequest(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = ex.Message,
-                Data = null
-            });
+            return BadRequest(new ApiResponse<Object>(false, ex.Message, null));
         }
     }
 }

@@ -28,13 +28,8 @@ public class UsersController : ControllerBase
     {
         _logger.LogInformation("Retrieving all users");
         var users = await _userService.GetUsersAsync();
-        var response = new ApiResponse<Object>
-        {
-            Success = true,
-            Message = "Users retrieved successfully",
-            Data = users
-        };
-        return Ok(response);
+     
+        return Ok(new ApiResponse<Object>(true, "Users retrieved successfully", users));
     }
 
 
@@ -43,12 +38,7 @@ public class UsersController : ControllerBase
     {
         _logger.LogInformation("Creating a new user with email: {Email}", dto.Email);
         var user = await _userService.CreateUserAsync(dto);
-        var response = new ApiResponse<Object>
-        {
-            Success = true,
-            Message = "User created successfully",
-            Data = user
-        };
+        var response = new ApiResponse<Object>(true, "User created successfully", user);
         return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, response);
     }
 
@@ -60,20 +50,10 @@ public class UsersController : ControllerBase
         if (user == null)
         {
             _logger.LogWarning("User not found");
-            return NotFound(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = "User not found",
-                Data = null
-            });
+            return NotFound(new ApiResponse<Object>(false, "User not found", null));
         }
 
-        return Ok(new ApiResponse<Object>
-        {
-            Success = true,
-            Message = "User retrieved successfully",
-            Data = user
-        });
+        return Ok(new ApiResponse<Object>(true, "User retrieved successfully", user));
     }
 
     [HttpPut("{id}")]
@@ -84,19 +64,9 @@ public class UsersController : ControllerBase
         if (user == null)
         {
             _logger.LogWarning("User not found");
-            return NotFound(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = "User not found",
-                Data = null
-            });
+            return NotFound(new ApiResponse<Object>(false, "User not found", null));
         }
-        return Ok(new ApiResponse<Object>
-        {
-            Success = true,
-            Message = "User updated successfully",
-            Data = user
-        });
+        return Ok(new ApiResponse<Object>(true, "User updated successfully", user));
     }
 
     [Authorize(Roles = "Admin, User")]
@@ -108,19 +78,9 @@ public class UsersController : ControllerBase
         if (!success)
         {
             _logger.LogWarning("User not found");
-            return NotFound(new ApiResponse<Object>
-            {
-                Success = false,
-                Message = "User not found",
-                Data = null
-            });
+            return NotFound(new ApiResponse<Object>(false, "User not found", null));
         }
         _logger.LogInformation("Deleted user with ID: {Id}", id);
-        return Ok(new ApiResponse<Object>
-        {
-            Success = true,
-            Message = "User deleted successfully",
-            Data = null
-        });
+        return Ok(new ApiResponse<Object>(true, "User deleted successfully", null));
     }
 }
